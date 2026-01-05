@@ -4,8 +4,8 @@ import { format } from "date-fns";
 import { useLocalStorage } from "../composables/useLocalStorage";
 import { getDailyBackground } from "../data/backgrounds";
 import { getDailyQuote } from "../data/quotes";
-// import Weather from "./Weather.vue";
-// import TodoList from "./TodoList.vue";
+import Weather from "./Weather.vue";
+import TodoList from "./TodoList.vue";
 
 // Inspirational quote
 const quote = getDailyQuote();
@@ -76,9 +76,9 @@ onUnmounted(() => {
     ></div>
 
     <!-- Weather Widget - Top Left -->
-    <!-- <div class="absolute top-6 left-6 z-10">
+    <div class="absolute top-6 left-6 z-10">
       <Weather />
-    </div> -->
+    </div>
 
     <!-- Main Content - Center -->
     <div class="relative z-10 text-center text-white">
@@ -120,9 +120,9 @@ onUnmounted(() => {
     </div>
 
     <!-- Todo List - Bottom Right -->
-    <!-- <div class="absolute bottom-6 right-6 z-10">
+    <div class="absolute bottom-6 right-6 z-10">
       <TodoList />
-    </div> -->
+    </div>
 
     <!-- Inspirational Quote - Bottom Center -->
     <div

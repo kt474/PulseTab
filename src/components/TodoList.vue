@@ -119,13 +119,6 @@ function deleteTodo(id: number) {
             </button>
           </li>
         </ul>
-
-        <p
-          v-if="todos.length === 0"
-          class="text-white/50 text-sm text-center font-inter mt-4"
-        >
-          No tasks yet. Add one above!
-        </p>
       </div>
     </Transition>
   </div>

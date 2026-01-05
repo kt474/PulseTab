@@ -6,6 +6,7 @@ interface WeatherData {
   condition: string;
   icon: string;
   location: string;
+  query: string;
 }
 
 const weather = ref<WeatherData | null>(null);
@@ -42,7 +43,7 @@ function getWeatherIcon(condition: string): string {
 async function fetchWeather() {
   try {
     // Check cache first
-    const cached = localStorage.getItem("weather-cache");
+    const cached = localStorage.getItem("weather-cache-v3");
     if (cached) {
       const { data, timestamp } = JSON.parse(cached);
       // Cache valid for 30 minutes
@@ -53,23 +54,45 @@ async function fetchWeather() {
       }
     }
 
+    // Get user's location using browser geolocation
+    let locationQuery = "";
+    try {
+      const position = await new Promise<GeolocationPosition>(
+        (resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(resolve, reject, {
+            timeout: 5000,
+            maximumAge: 30 * 60 * 1000, // Use cached position if less than 30 min old
+          });
+        }
+      );
+      locationQuery = `${position.coords.latitude},${position.coords.longitude}`;
+    } catch (geoError) {
+      // Fall back to IP-based location if geolocation fails
+      console.log("Geolocation unavailable, using IP-based location");
+    }
+
     // Use wttr.in for free weather (no API key needed)
-    const response = await fetch("https://wttr.in/?format=j1");
+    const response = await fetch(`https://wttr.in/${locationQuery}?format=j1`);
     const data = await response.json();
 
     const current = data.current_condition[0];
     const location = data.nearest_area[0];
+
+    // reliably get coordinates from the response regardless of source
+    const lat = location.latitude;
+    const lon = location.longitude;
 
     weather.value = {
       temp: current.temp_F,
       condition: current.weatherDesc[0].value,
       icon: getWeatherIcon(current.weatherDesc[0].value),
       location: location.areaName[0].value,
+      query: `${lat},${lon}`, // Use coordinates for weather.com
     };
 
     // Cache the result
     localStorage.setItem(
-      "weather-cache",
+      "weather-cache-v3",
       JSON.stringify({
         data: weather.value,
         timestamp: Date.now(),
@@ -88,8 +111,16 @@ onMounted(() => {
 </script>
 
 <template>
-  <div
+  <component
+    :is="weather ? 'a' : 'div'"
+    :href="
+      weather
+        ? `https://weather.com/weather/today/l/${weather.query}`
+        : undefined
+    "
+    :target="weather ? '_blank' : undefined"
     class="flex items-center gap-2 px-4 py-3 bg-black/30 backdrop-blur-lg rounded-2xl text-white font-inter"
+    :class="{ 'hover:bg-black/40 transition-colors cursor-pointer': weather }"
   >
     <template v-if="loading">
       <span class="text-sm opacity-70">Loading...</span>
@@ -102,5 +133,5 @@ onMounted(() => {
       <span class="text-xl font-semibold">{{ weather.temp }}°F</span>
       <span class="text-sm opacity-80">{{ weather.location }}</span>
     </template>
-  </div>
+  </component>
 </template>
