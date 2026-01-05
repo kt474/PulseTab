@@ -80,9 +80,10 @@ onUnmounted(() => {
     <div class="relative z-10 text-center text-white">
       <!-- Time Display -->
       <div class="flex items-baseline justify-center gap-2">
-        <span class="text-9xl font-semibold leading-none drop-shadow-2xl">{{
-          time
-        }}</span>
+        <span
+          class="text-[9.5rem] font-semibold leading-none drop-shadow-2xl"
+          >{{ time }}</span
+        >
         <span class="text-3xl font-semibold uppercase">{{ ampm }}</span>
       </div>
 
@@ -92,7 +93,7 @@ onUnmounted(() => {
       </p>
 
       <!-- Greeting -->
-      <h2 class="text-5xl font-medium mb-8 drop-shadow-md">
+      <h2 class="text-4xl font-medium mb-8 drop-shadow-md">
         {{ greeting }}<template v-if="userName">, </template>
         <span
           v-if="!isEditingName && userName"
