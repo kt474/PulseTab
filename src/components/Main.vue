@@ -9,6 +9,7 @@ import TodoList from "./TodoList.vue";
 import Settings from "./Settings.vue";
 import FocusTimer from "./FocusTimer.vue";
 import QuickLinks from "./QuickLinks.vue";
+import Notes from "./Notes.vue";
 
 // Inspirational quote
 const quote = getDailyQuote();
@@ -63,6 +64,7 @@ const showTodo = useLocalStorage("showTodo", true);
 const showQuote = useLocalStorage("showQuote", true);
 const showFocusTimer = useLocalStorage("showFocusTimer", true);
 const showQuickLinks = useLocalStorage("showQuickLinks", true);
+const showNotes = useLocalStorage("showNotes", true);
 
 onMounted(() => {
   timeInterval = window.setInterval(() => {
@@ -139,9 +141,10 @@ onUnmounted(() => {
       </h2>
     </div>
 
-    <!-- Todo List - Bottom Right -->
-    <div v-if="showTodo" class="absolute bottom-4 right-4 z-10">
-      <TodoList />
+    <!-- Bottom Right Widgets (Notes & Todo) -->
+    <div class="absolute bottom-4 right-4 z-10 flex gap-4 items-end">
+      <Notes v-if="showNotes" />
+      <TodoList v-if="showTodo" />
     </div>
 
     <!-- Settings - Bottom Left -->
@@ -152,6 +155,7 @@ onUnmounted(() => {
         v-model:showQuote="showQuote"
         v-model:showFocusTimer="showFocusTimer"
         v-model:showQuickLinks="showQuickLinks"
+        v-model:showNotes="showNotes"
       />
     </div>
 

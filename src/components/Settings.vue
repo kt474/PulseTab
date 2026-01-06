@@ -7,6 +7,7 @@ defineProps<{
   showQuote: boolean;
   showFocusTimer: boolean;
   showQuickLinks: boolean;
+  showNotes: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -15,6 +16,7 @@ const emit = defineEmits<{
   (e: "update:showQuote", value: boolean): void;
   (e: "update:showFocusTimer", value: boolean): void;
   (e: "update:showQuickLinks", value: boolean): void;
+  (e: "update:showNotes", value: boolean): void;
 }>();
 
 const isOpen = ref(false);
@@ -156,6 +158,27 @@ onUnmounted(() => {
                 @change="
                   emit(
                     'update:showTodo',
+                    ($event.target as HTMLInputElement).checked
+                  )
+                "
+              />
+              <div
+                class="w-11 h-6 bg-white/20 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500/80 transition-colors"
+              ></div>
+            </div>
+          </label>
+
+          <!-- Notes Toggle -->
+          <label class="flex items-center justify-between cursor-pointer group">
+            <span class="text-white text-sm font-medium">Notes</span>
+            <div class="relative">
+              <input
+                type="checkbox"
+                class="sr-only peer"
+                :checked="showNotes"
+                @change="
+                  emit(
+                    'update:showNotes',
                     ($event.target as HTMLInputElement).checked
                   )
                 "
