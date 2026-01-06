@@ -4,11 +4,15 @@ import { ref, onMounted, onUnmounted } from "vue";
 defineProps<{
   showWeather: boolean;
   showTodo: boolean;
+  showQuote: boolean;
+  showFocusTimer: boolean;
 }>();
 
 const emit = defineEmits<{
   (e: "update:showWeather", value: boolean): void;
   (e: "update:showTodo", value: boolean): void;
+  (e: "update:showQuote", value: boolean): void;
+  (e: "update:showFocusTimer", value: boolean): void;
 }>();
 
 const isOpen = ref(false);
@@ -66,6 +70,48 @@ onUnmounted(() => {
                 @change="
                   emit(
                     'update:showWeather',
+                    ($event.target as HTMLInputElement).checked
+                  )
+                "
+              />
+              <div
+                class="w-11 h-6 bg-white/20 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500/80 transition-colors"
+              ></div>
+            </div>
+          </label>
+
+          <!-- Focus Timer Toggle -->
+          <label class="flex items-center justify-between cursor-pointer group">
+            <span class="text-white text-sm font-medium">Focus Timer</span>
+            <div class="relative">
+              <input
+                type="checkbox"
+                class="sr-only peer"
+                :checked="showFocusTimer"
+                @change="
+                  emit(
+                    'update:showFocusTimer',
+                    ($event.target as HTMLInputElement).checked
+                  )
+                "
+              />
+              <div
+                class="w-11 h-6 bg-white/20 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500/80 transition-colors"
+              ></div>
+            </div>
+          </label>
+
+          <!-- Quote Toggle -->
+          <label class="flex items-center justify-between cursor-pointer group">
+            <span class="text-white text-sm font-medium">Daily Quote</span>
+            <div class="relative">
+              <input
+                type="checkbox"
+                class="sr-only peer"
+                :checked="showQuote"
+                @change="
+                  emit(
+                    'update:showQuote',
                     ($event.target as HTMLInputElement).checked
                   )
                 "

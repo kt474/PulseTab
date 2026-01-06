@@ -59,6 +59,8 @@ const backgroundUrl = ref(getDailyBackground());
 // Widget visibility (persisted)
 const showWeather = useLocalStorage("showWeather", true);
 const showTodo = useLocalStorage("showTodo", true);
+const showQuote = useLocalStorage("showQuote", true);
+const showFocusTimer = useLocalStorage("showFocusTimer", true);
 
 onMounted(() => {
   timeInterval = window.setInterval(() => {
@@ -87,7 +89,7 @@ onUnmounted(() => {
     </div>
 
     <!-- Focus Timer - Top Right -->
-    <div class="absolute top-4 right-4 z-20">
+    <div v-if="showFocusTimer" class="absolute top-4 right-4 z-20">
       <FocusTimer />
     </div>
 
@@ -137,15 +139,21 @@ onUnmounted(() => {
 
     <!-- Settings - Bottom Left -->
     <div class="absolute bottom-4 left-4 z-10">
-      <Settings v-model:showWeather="showWeather" v-model:showTodo="showTodo" />
+      <Settings
+        v-model:showWeather="showWeather"
+        v-model:showTodo="showTodo"
+        v-model:showQuote="showQuote"
+        v-model:showFocusTimer="showFocusTimer"
+      />
     </div>
 
     <!-- Inspirational Quote - Bottom Center -->
     <div
+      v-if="showQuote"
       class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 text-center text-white max-w-2xl px-6"
     >
       <p class="text-lg drop-shadow-md leading-relaxed">"{{ quote.text }}"</p>
-      <p class="text-sm mt-2 opacity-80 drop-shadow-sm">{{ quote.author }}</p>
+      <!-- <p class="text-sm mt-2 opacity-80 drop-shadow-sm">{{ quote.author }}</p> -->
     </div>
   </div>
 </template>
