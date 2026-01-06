@@ -151,7 +151,7 @@ onUnmounted(() => {
     >
       <div
         v-if="isOpen"
-        class="absolute top-16 right-0 w-72 bg-black/60 backdrop-blur-xl rounded-2xl p-6 shadow-2xl origin-top-right"
+        class="absolute top-16 right-0 w-72 bg-black/60 backdrop-blur-xl rounded-2xl p-4 shadow-2xl origin-top-right"
       >
         <!-- Mode Toggles -->
         <div

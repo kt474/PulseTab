@@ -8,6 +8,7 @@ import Weather from "./Weather.vue";
 import TodoList from "./TodoList.vue";
 import Settings from "./Settings.vue";
 import FocusTimer from "./FocusTimer.vue";
+import QuickLinks from "./QuickLinks.vue";
 
 // Inspirational quote
 const quote = getDailyQuote();
@@ -61,6 +62,7 @@ const showWeather = useLocalStorage("showWeather", true);
 const showTodo = useLocalStorage("showTodo", true);
 const showQuote = useLocalStorage("showQuote", true);
 const showFocusTimer = useLocalStorage("showFocusTimer", true);
+const showQuickLinks = useLocalStorage("showQuickLinks", true);
 
 onMounted(() => {
   timeInterval = window.setInterval(() => {
@@ -91,6 +93,11 @@ onUnmounted(() => {
     <!-- Focus Timer - Top Right -->
     <div v-if="showFocusTimer" class="absolute top-4 right-4 z-20">
       <FocusTimer />
+    </div>
+
+    <!-- Quick Links - Top Right (Left of Timer) -->
+    <div v-if="showQuickLinks" class="absolute top-4 right-14 z-20 pr-4">
+      <QuickLinks />
     </div>
 
     <!-- Main Content - Center -->
@@ -144,6 +151,7 @@ onUnmounted(() => {
         v-model:showTodo="showTodo"
         v-model:showQuote="showQuote"
         v-model:showFocusTimer="showFocusTimer"
+        v-model:showQuickLinks="showQuickLinks"
       />
     </div>
 
