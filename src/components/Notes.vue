@@ -1,13 +1,19 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useLocalStorage } from "../composables/useLocalStorage";
+import { useClickOutside } from "../composables/useClickOutside";
 
 const isOpen = ref(false);
 const note = useLocalStorage("note", "");
+const containerRef = ref<HTMLElement | null>(null);
+
+useClickOutside(containerRef, () => {
+  isOpen.value = false;
+});
 </script>
 
 <template>
-  <div class="relative">
+  <div class="relative" ref="containerRef">
     <!-- Toggle Button -->
     <button
       class="relative w-10 h-10 rounded-full bg-black/30 backdrop-blur-lg border-none text-white cursor-pointer flex items-center justify-center transition-all duration-200 hover:bg-black/50 hover:scale-105"

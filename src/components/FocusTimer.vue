@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, onUnmounted, watch } from "vue";
+import { useClickOutside } from "../composables/useClickOutside";
 
 // Constants
 const WORK_TIME = 25 * 60;
@@ -7,11 +8,16 @@ const BREAK = 5 * 60;
 
 // State
 const isOpen = ref(false);
+const containerRef = ref<HTMLElement | null>(null);
 const timerState = ref<"idle" | "running" | "paused">("idle");
 const timeLeft = ref(WORK_TIME);
 const currentMode = ref<"work" | "break">("work");
 
 let intervalId: number | null = null;
+
+useClickOutside(containerRef, () => {
+  isOpen.value = false;
+});
 
 // Derived
 const formattedTime = computed(() => {
@@ -93,7 +99,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="relative font-inter">
+  <div class="relative font-inter" ref="containerRef">
     <!-- Toggle Button -->
     <button
       @click="isOpen = !isOpen"

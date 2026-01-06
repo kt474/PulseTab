@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useLocalStorage } from "../composables/useLocalStorage";
+import { useClickOutside } from "../composables/useClickOutside";
 
 interface QuickLink {
   id: string;
@@ -12,6 +13,11 @@ const showAddModal = ref(false);
 const newLinkUrl = ref("");
 const newLinkTitle = ref("");
 const links = useLocalStorage<QuickLink[]>("quickLinks", []);
+const containerRef = ref<HTMLElement | null>(null);
+
+useClickOutside(containerRef, () => {
+  showAddModal.value = false;
+});
 
 function getFavicon(url: string) {
   try {
@@ -72,7 +78,7 @@ function removeLink(id: string) {
     </a>
 
     <!-- Add Button -->
-    <div class="relative">
+    <div class="relative" ref="containerRef">
       <button
         @click="showAddModal = !showAddModal"
         class="w-10 h-10 rounded-full bg-black/20 backdrop-blur-md hover:bg-black/40 text-white hover:text-white flex items-center justify-center transition-all duration-300 hover:scale-105 cursor-pointer"
