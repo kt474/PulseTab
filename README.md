@@ -2,6 +2,8 @@
 
 An elegant new tab page for Chrome.
 
+![homepage](./public/homepage.webp)
+
 ## Features
 
 - Unsplash wallpaper background
