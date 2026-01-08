@@ -22,6 +22,7 @@ const emit = defineEmits<{
 }>();
 
 const isOpen = ref(false);
+const activeTab = ref("general");
 const settingsRef = ref<HTMLElement | null>(null);
 
 function toggleMenu() {
@@ -56,161 +57,240 @@ onUnmounted(() => {
     >
       <div
         v-if="isOpen"
-        class="absolute bottom-16 left-0 w-64 bg-black/60 backdrop-blur-2xl rounded-3xl p-6 shadow-2xl origin-bottom-left border border-white/10"
+        class="absolute bottom-16 left-0 w-[480px] h-[380px] bg-black/60 backdrop-blur-2xl rounded-3xl overflow-hidden shadow-2xl origin-bottom-left border border-white/10 flex"
       >
-        <h3
-          class="text-white text-sm font-medium mb-3 opacity-60 uppercase tracking-wider"
-        >
-          Settings
-        </h3>
+        <!-- Sidebar -->
+        <div class="w-36 border-r border-white/10 flex flex-col py-6">
+          <div class="px-6 mb-8">
+            <h3
+              class="text-white text-xs font-bold opacity-40 uppercase tracking-widest"
+            >
+              Menu
+            </h3>
+          </div>
 
-        <div class="space-y-4">
-          <!-- Weather Toggle -->
-          <label class="flex items-center justify-between cursor-pointer group">
-            <span class="text-white text-sm font-medium">Weather</span>
-            <div class="relative">
-              <input
-                type="checkbox"
-                class="sr-only peer"
-                :checked="showWeather"
-                @change="
-                  emit(
-                    'update:showWeather',
-                    ($event.target as HTMLInputElement).checked
-                  )
-                "
-              />
-              <div
-                class="w-11 h-6 bg-white/20 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500/80 transition-colors"
-              ></div>
-            </div>
-          </label>
+          <nav class="flex-1 space-y-1 px-3">
+            <button
+              @click="activeTab = 'general'"
+              :class="[
+                'w-full cursor-pointer flex items-center px-3 py-2 text-sm font-medium rounded-xl transition-all duration-200',
+                activeTab === 'general'
+                  ? 'bg-white/10 text-white'
+                  : 'text-white/60 hover:text-white hover:bg-white/5',
+              ]"
+            >
+              Settings
+            </button>
+            <button
+              @click="activeTab = 'about'"
+              :class="[
+                'w-full cursor-pointer flex items-center px-3 py-2 text-sm font-medium rounded-xl transition-all duration-200',
+                activeTab === 'about'
+                  ? 'bg-white/10 text-white'
+                  : 'text-white/60 hover:text-white hover:bg-white/5',
+              ]"
+            >
+              About
+            </button>
+          </nav>
+        </div>
 
-          <!-- Focus Timer Toggle -->
-          <label class="flex items-center justify-between cursor-pointer group">
-            <span class="text-white text-sm font-medium">Focus Timer</span>
-            <div class="relative">
-              <input
-                type="checkbox"
-                class="sr-only peer"
-                :checked="showFocusTimer"
-                @change="
-                  emit(
-                    'update:showFocusTimer',
-                    ($event.target as HTMLInputElement).checked
-                  )
-                "
-              />
-              <div
-                class="w-11 h-6 bg-white/20 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500/80 transition-colors"
-              ></div>
-            </div>
-          </label>
+        <!-- Content Area -->
+        <div class="flex-1 overflow-y-auto p-6">
+          <div v-if="activeTab === 'general'">
+            <h3
+              class="text-white text-sm font-medium mb-6 opacity-60 uppercase tracking-wider"
+            >
+              Settings
+            </h3>
 
-          <!-- Quick Links Toggle -->
-          <label class="flex items-center justify-between cursor-pointer group">
-            <span class="text-white text-sm font-medium">Quick Links</span>
-            <div class="relative">
-              <input
-                type="checkbox"
-                class="sr-only peer"
-                :checked="showQuickLinks"
-                @change="
-                  emit(
-                    'update:showQuickLinks',
-                    ($event.target as HTMLInputElement).checked
-                  )
-                "
-              />
-              <div
-                class="w-11 h-6 bg-white/20 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500/80 transition-colors"
-              ></div>
-            </div>
-          </label>
+            <div class="space-y-4">
+              <!-- Weather Toggle -->
+              <label
+                class="flex items-center justify-between cursor-pointer group"
+              >
+                <span class="text-white text-sm font-medium">Weather</span>
+                <div class="relative">
+                  <input
+                    type="checkbox"
+                    class="sr-only peer"
+                    :checked="showWeather"
+                    @change="
+                      emit(
+                        'update:showWeather',
+                        ($event.target as HTMLInputElement).checked
+                      )
+                    "
+                  />
+                  <div
+                    class="w-11 h-6 bg-white/20 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500/80 transition-colors"
+                  ></div>
+                </div>
+              </label>
 
-          <!-- Quote Toggle -->
-          <label class="flex items-center justify-between cursor-pointer group">
-            <span class="text-white text-sm font-medium">Daily Quote</span>
-            <div class="relative">
-              <input
-                type="checkbox"
-                class="sr-only peer"
-                :checked="showQuote"
-                @change="
-                  emit(
-                    'update:showQuote',
-                    ($event.target as HTMLInputElement).checked
-                  )
-                "
-              />
-              <div
-                class="w-11 h-6 bg-white/20 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500/80 transition-colors"
-              ></div>
-            </div>
-          </label>
+              <!-- Focus Timer Toggle -->
+              <label
+                class="flex items-center justify-between cursor-pointer group"
+              >
+                <span class="text-white text-sm font-medium">Focus Timer</span>
+                <div class="relative">
+                  <input
+                    type="checkbox"
+                    class="sr-only peer"
+                    :checked="showFocusTimer"
+                    @change="
+                      emit(
+                        'update:showFocusTimer',
+                        ($event.target as HTMLInputElement).checked
+                      )
+                    "
+                  />
+                  <div
+                    class="w-11 h-6 bg-white/20 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500/80 transition-colors"
+                  ></div>
+                </div>
+              </label>
 
-          <!-- Todo Toggle -->
-          <label class="flex items-center justify-between cursor-pointer group">
-            <span class="text-white text-sm font-medium">To-Do List</span>
-            <div class="relative">
-              <input
-                type="checkbox"
-                class="sr-only peer"
-                :checked="showTodo"
-                @change="
-                  emit(
-                    'update:showTodo',
-                    ($event.target as HTMLInputElement).checked
-                  )
-                "
-              />
-              <div
-                class="w-11 h-6 bg-white/20 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500/80 transition-colors"
-              ></div>
-            </div>
-          </label>
+              <!-- Quick Links Toggle -->
+              <label
+                class="flex items-center justify-between cursor-pointer group"
+              >
+                <span class="text-white text-sm font-medium">Quick Links</span>
+                <div class="relative">
+                  <input
+                    type="checkbox"
+                    class="sr-only peer"
+                    :checked="showQuickLinks"
+                    @change="
+                      emit(
+                        'update:showQuickLinks',
+                        ($event.target as HTMLInputElement).checked
+                      )
+                    "
+                  />
+                  <div
+                    class="w-11 h-6 bg-white/20 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500/80 transition-colors"
+                  ></div>
+                </div>
+              </label>
 
-          <!-- Notes Toggle -->
-          <label class="flex items-center justify-between cursor-pointer group">
-            <span class="text-white text-sm font-medium">Notes</span>
-            <div class="relative">
-              <input
-                type="checkbox"
-                class="sr-only peer"
-                :checked="showNotes"
-                @change="
-                  emit(
-                    'update:showNotes',
-                    ($event.target as HTMLInputElement).checked
-                  )
-                "
-              />
-              <div
-                class="w-11 h-6 bg-white/20 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500/80 transition-colors"
-              ></div>
-            </div>
-          </label>
+              <!-- Quote Toggle -->
+              <label
+                class="flex items-center justify-between cursor-pointer group"
+              >
+                <span class="text-white text-sm font-medium">Daily Quote</span>
+                <div class="relative">
+                  <input
+                    type="checkbox"
+                    class="sr-only peer"
+                    :checked="showQuote"
+                    @change="
+                      emit(
+                        'update:showQuote',
+                        ($event.target as HTMLInputElement).checked
+                      )
+                    "
+                  />
+                  <div
+                    class="w-11 h-6 bg-white/20 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500/80 transition-colors"
+                  ></div>
+                </div>
+              </label>
 
-          <!-- World Clock Toggle -->
-          <label class="flex items-center justify-between cursor-pointer group">
-            <span class="text-white text-sm font-medium">World Clock</span>
-            <div class="relative">
-              <input
-                type="checkbox"
-                class="sr-only peer"
-                :checked="showWorldClock"
-                @change="
-                  emit(
-                    'update:showWorldClock',
-                    ($event.target as HTMLInputElement).checked
-                  )
-                "
-              />
-              <div
-                class="w-11 h-6 bg-white/20 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500/80 transition-colors"
-              ></div>
+              <!-- Todo Toggle -->
+              <label
+                class="flex items-center justify-between cursor-pointer group"
+              >
+                <span class="text-white text-sm font-medium">To-Do List</span>
+                <div class="relative">
+                  <input
+                    type="checkbox"
+                    class="sr-only peer"
+                    :checked="showTodo"
+                    @change="
+                      emit(
+                        'update:showTodo',
+                        ($event.target as HTMLInputElement).checked
+                      )
+                    "
+                  />
+                  <div
+                    class="w-11 h-6 bg-white/20 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500/80 transition-colors"
+                  ></div>
+                </div>
+              </label>
+
+              <!-- Notes Toggle -->
+              <label
+                class="flex items-center justify-between cursor-pointer group"
+              >
+                <span class="text-white text-sm font-medium">Notes</span>
+                <div class="relative">
+                  <input
+                    type="checkbox"
+                    class="sr-only peer"
+                    :checked="showNotes"
+                    @change="
+                      emit(
+                        'update:showNotes',
+                        ($event.target as HTMLInputElement).checked
+                      )
+                    "
+                  />
+                  <div
+                    class="w-11 h-6 bg-white/20 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500/80 transition-colors"
+                  ></div>
+                </div>
+              </label>
+
+              <!-- World Clock Toggle -->
+              <label
+                class="flex items-center justify-between cursor-pointer group"
+              >
+                <span class="text-white text-sm font-medium">World Clock</span>
+                <div class="relative">
+                  <input
+                    type="checkbox"
+                    class="sr-only peer"
+                    :checked="showWorldClock"
+                    @change="
+                      emit(
+                        'update:showWorldClock',
+                        ($event.target as HTMLInputElement).checked
+                      )
+                    "
+                  />
+                  <div
+                    class="w-11 h-6 bg-white/20 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500/80 transition-colors"
+                  ></div>
+                </div>
+              </label>
             </div>
-          </label>
+          </div>
+
+          <div v-if="activeTab === 'about'" class="space-y-6">
+            <h3
+              class="text-white text-sm font-medium mb-4 opacity-60 uppercase tracking-wider"
+            >
+              About
+            </h3>
+
+            <div class="space-y-4">
+              <div class="p-3 bg-white/5 rounded-2xl border border-white/5">
+                <p class="text-white/80 text-sm leading-relaxed">
+                  PulseTab is an open source chrome extension that replaces the
+                  default new tab page. To report issues or request features,
+                  please visit the
+                  <a
+                    href="https://github.com/kt474/pulse-tab"
+                    class="text-blue-500 font-medium"
+                    target="_blank"
+                    >GitHub repository</a
+                  >.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </transition>
