@@ -33,13 +33,29 @@ const weatherIcons: Record<string, string> = {
   Sleet: "🌨️",
 };
 
+function isEvening(): boolean {
+  const hour = new Date().getHours();
+  return hour >= 18 || hour < 6;
+}
+
 function getWeatherIcon(condition: string): string {
+  const evening = isEvening();
+  const lowerCondition = condition.toLowerCase();
+
+  // Show moon for clear weather at night
+  if (
+    evening &&
+    (lowerCondition.includes("clear") || lowerCondition.includes("sunny"))
+  ) {
+    return "🌙";
+  }
+
   for (const [key, icon] of Object.entries(weatherIcons)) {
-    if (condition.toLowerCase().includes(key.toLowerCase())) {
+    if (lowerCondition.includes(key.toLowerCase())) {
       return icon;
     }
   }
-  return "🌤️";
+  return evening ? "🌙" : "🌤️";
 }
 
 async function fetchWeather() {
@@ -89,7 +105,7 @@ async function fetchWeather() {
       feelsLike: current.FeelsLikeF,
       humidity: current.humidity,
       condition: current.weatherDesc[0].value,
-      icon: getWeatherIcon(current.weatherDesc[0].value),
+      icon: "", // Keep for interface compatibility, but we use the function in template
       location: location.areaName[0].value,
       query: `${lat},${lon}`, // Use coordinates for weather.com
     };
@@ -143,7 +159,7 @@ onMounted(() => {
     <template v-else-if="weather">
       <span
         class="text-3xl drop-shadow-sm group-hover:scale-110 transition-transform duration-300"
-        >{{ weather.icon }}</span
+        >{{ getWeatherIcon(weather.condition) }}</span
       >
       <div class="flex flex-col">
         <span class="text-xl font-bold leading-none">{{ weather.temp }}°</span>
