@@ -294,12 +294,12 @@ onUnmounted(() => {
 
             <div class="space-y-4 text-white">
               <p class="font-semibold">
-                Current background URL:
+                Current background:
                 <a
-                  class="font-normal text-sm text-blue-500"
+                  class="font-normal text-blue-500"
                   :href="currentBackground?.url"
                   target="_blank"
-                  >{{ currentBackground?.url }}</a
+                  >URL</a
                 >
               </p>
             </div>
