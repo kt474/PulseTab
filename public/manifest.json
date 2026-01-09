@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "PulseTab",
   "version": "1.0.0",
-  "description": "A simple new tab page",
+  "description": "An elegant new tab page for Chrome",
   "chrome_url_overrides": {
     "newtab": "index.html"
   },
@@ -12,5 +12,6 @@
     "48": "icon-48.png",
     "128": "icon-128.png"
   },
-  "permissions": []
+  "permissions": ["geolocation", "storage"],
+  "host_permissions": ["https://wttr.in/*", "https://images.unsplash.com/*"]
 }
