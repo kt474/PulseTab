@@ -57,10 +57,27 @@ if (focusDate.value !== today) {
 }
 
 // Background image
-const backgroundUrl = ref(getDailyBackground());
+const currentBackground = useLocalStorage("background", {
+  url: "",
+  photoId: "",
+});
+
+// Initialize background if not set
+if (!currentBackground.value.photoId) {
+  getDailyBackground();
+  const stored = localStorage.getItem("background");
+  if (stored) currentBackground.value = JSON.parse(stored);
+}
+
+const backgroundUrl = computed(() => {
+  if (!currentBackground.value.photoId) return "";
+  return `https://images.unsplash.com/photo-${currentBackground.value.photoId}?w=2560&q=90`;
+});
 
 function handleRefreshBackground() {
-  backgroundUrl.value = refreshBackground();
+  refreshBackground();
+  const stored = localStorage.getItem("background");
+  if (stored) currentBackground.value = JSON.parse(stored);
 }
 
 // Widget visibility (persisted)

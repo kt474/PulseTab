@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from "vue";
+import { useLocalStorage } from "../composables/useLocalStorage";
 
 defineProps<{
   showWeather: boolean;
@@ -10,6 +11,11 @@ defineProps<{
   showNotes: boolean;
   showWorldClock: boolean;
 }>();
+
+const currentBackground = useLocalStorage("background", {
+  url: "",
+  photoId: "",
+});
 
 const emit = defineEmits<{
   (e: "update:showWeather", value: boolean): void;
@@ -80,6 +86,17 @@ onUnmounted(() => {
               ]"
             >
               Settings
+            </button>
+            <button
+              @click="activeTab = 'photos'"
+              :class="[
+                'w-full cursor-pointer flex items-center px-3 py-2 text-sm font-medium rounded-xl transition-all duration-200',
+                activeTab === 'photos'
+                  ? 'bg-white/10 text-white'
+                  : 'text-white/60 hover:text-white hover:bg-white/5',
+              ]"
+            >
+              Photos
             </button>
             <button
               @click="activeTab = 'about'"
@@ -265,6 +282,26 @@ onUnmounted(() => {
                   ></div>
                 </div>
               </label>
+            </div>
+          </div>
+
+          <div v-if="activeTab === 'photos'" class="space-y-6">
+            <h3
+              class="text-white text-sm font-medium mb-4 opacity-60 uppercase tracking-wider"
+            >
+              Photos
+            </h3>
+
+            <div class="space-y-4 text-white">
+              <p class="font-semibold">
+                Current background URL:
+                <a
+                  class="font-normal text-sm text-blue-500"
+                  :href="currentBackground?.url"
+                  target="_blank"
+                  >{{ currentBackground?.url }}</a
+                >
+              </p>
             </div>
           </div>
 
