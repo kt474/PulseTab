@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import Main from "./components/Main.vue";
+import { Analytics } from "@vercel/analytics/vue";
 </script>
 
 <template>
+  <Analytics />
   <Main />
 </template>
 
